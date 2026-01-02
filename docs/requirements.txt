@@ -1,0 +1,11 @@
+pymc==5.23.0
+astropy
+pandas
+matplotlib
+jupyter
+ipython
+sphinx
+sphinx_rtd_theme
+nbsphinx
+numpydoc
+numpy

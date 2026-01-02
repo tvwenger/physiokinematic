@@ -1,14 +1,22 @@
 name: physiokinematic
 channels:
   - conda-forge
-  - defaults
+  - nodefaults
 dependencies:
-  - python
-  - pymc
-  - numpy
+  - pymc==5.20.0
   - astropy
   - pandas
   - matplotlib
   - jupyter
   - ipython
-
+  - jupyter_contrib_nbextensions
+  - jupyter_nbextensions_configurator
+  - ipywidgets
+  - versioneer
+  - black
+  - flake8
+  - pip
+  - pip:
+    - "sphinx_rtd_theme"
+    - "nbsphinx"
+    - "numpydoc"

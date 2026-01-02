@@ -1,24 +1,11 @@
 """
 utils.py
-Utilities for analysis.
+Utility functions.
 
-Copyright(C) 2023-2024 by
+Copyright(C) 2023-2025 by
 Trey V. Wenger; tvwenger@gmail.com
-
-GNU General Public License v3 (GNU GPLv3)
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published
-by the Free Software Foundation, either version 3 of the License,
-or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+Ryan Bakko
+This code is licensed under MIT license (see LICENSE for details)
 """
 
 import numpy as np
@@ -37,22 +24,25 @@ __Vstd = 15.32  # km/s
 __Wstd = 7.74  # km/s
 
 
-def reid19_theta(R, R0=__R0, a2=__a2, a3=__a3):
-    """
-    Calculate the Reid et al. (2019) circular rotation speed at a
+def reid19_theta(R: float, R0: float = __R0, a2: float = __a2, a3: float = __a3):
+    """Calculate the Reid et al. (2019) circular rotation speed at a
     given Galactocentric radius.
 
-    Inputs:
-        R :: scalar (kpc)
-            Galactocentric radius
-        R0 :: scalar (kpc)
-            Solar Galactocentric radius
-        a2, a3 :: scalar
-            Parameters that define rotation curve
+    Parameters
+    ----------
+    R : float
+        Galactocentric radius (kpc)
+    R0 : float, optional
+        Solar Galactocentric radius (kpc), by default __R0
+    a2 : float, optional
+        Parameter that defines rotation curve, by default __a2
+    a3 : float, optional
+        Parameter that defines rotation curve, by default __a3
 
-    Returns: theta
-        theta :: scalar (km/s)
-            Circular rotation speed
+    Returns
+    -------
+    float
+        Circular rotation speed (km/s)
     """
     rho = R / (a2 * R0)
     lam = (a3 / 1.5) ** 5.0
@@ -68,35 +58,44 @@ def reid19_theta(R, R0=__R0, a2=__a2, a3=__a3):
 
 
 def reid19_vlsr(
-    glong,
-    glat,
-    R,
-    R0=__R0,
-    a2=__a2,
-    a3=__a3,
-    Usun=__Usun,
-    Vsun=__Vsun,
-    Wsun=__Wsun,
+    glong: float,
+    glat: float,
+    R: float,
+    R0: float = __R0,
+    a2: float = __a2,
+    a3: float = __a3,
+    Usun: float = __Usun,
+    Vsun: float = __Vsun,
+    Wsun: float = __Wsun,
 ):
-    """
-    Calculate the Reid et al. (2019) rotation curve LSR velocity
+    """Calculate the Reid et al. (2019) rotation curve LSR velocity
     at a given position.
 
-    Inputs:
-        glong, glat :: scalars (deg)
-            Galactic longitude and latitude
-        R :: scalar (kpc)
-            Galactocentric radius
-        R0 :: scalar (kpc)
-            Solar Galactocentric radius
-        a2, a3 :: scalar
-            Parameters that define rotation curve
-        Usun, Vsun, Wsun :: scalars (km/s)
-            Solar motion relative to the LSR
+    Parameters
+    ----------
+    glong : float
+        Galactic longitude (degrees)
+    glat : float
+        Galactic latitude (degrees)
+    R : float
+        Galactocentric radius (kpc)
+    R0 : float, optional
+        Solar Galactocentric radius (kpc), by default __R0
+    a2 : float, optional
+        Parameter that defines rotation curve, by default __a2
+    a3 : float, optional
+        Parameter that defines rotation curve, by default __a3
+    Usun : float, optional
+        Solar motion relative to the LSR (km/s), by default __Usun
+    Vsun : float, optional
+        Solar motion relative to the LSR (km/s), by default __Vsun
+    Wsun : float, optional
+        Solar motion relative to the LSR (km/s), by default __Wsun
 
-    Returns: vlsr
-        vlsr :: scalar (km/s)
-            LSR velocity
+    Returns
+    -------
+    float
+        LSR velocity (km/s)
     """
     # Circular velocities
     theta = reid19_theta(R, R0=R0, a2=a2, a3=a3)
@@ -114,23 +113,26 @@ def reid19_vlsr(
     return vlsr + (U + V) * cos_glat + W
 
 
-def distance(glong, glat, Rgal, R0=__R0):
-    """
-    Return the distances at which a given line-of-sight crosses a
+def distance(glong: float, glat: float, Rgal: float, R0: float = __R0):
+    """Return the distances at which a given line-of-sight crosses a
     given Galactocentric radius.
 
-    Inputs:
-        glong, glat :: scalars (deg)
-            Galactic longitude and latitude
-        Rgal :: scalar (kpc)
-            Galactocentric radius
-        R0 :: scalar (kpc)
-            Solar Galactocentric radius
+    Parameters
+    ----------
+    glong : float
+        Galactic longitude (degrees)
+    glat : float
+        Galactic latitude (degrees)
+    Rgal : float
+        Galactocentric radius (kpc)
+    R0 : float, optional
+        Solar Galactocentric radius (kpc), by default __R0
 
-    Returns: [d_near, d_far]
-        d_near, d_far :: scalars (kpc)
-            Near and far distances. Near distance is negative when not allowed.
-            Both distances are nan if line of sight never crosses Rgal.
+    Returns
+    -------
+    float, float
+        Near and far distances. Near distance is negative when not allowed.
+        Both distances are nan if line of sight never crosses Rgal.
     """
     glong_rad = np.deg2rad(glong)
     cos_glat = np.cos(np.deg2rad(glat))

@@ -1,0 +1,6 @@
+pymc==5.20.0
+astropy
+pandas
+matplotlib
+jupyter
+ipython
